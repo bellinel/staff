@@ -182,7 +182,7 @@ async def confirm(callback: CallbackQuery):
     except Exception as e:
         await bot.send_message(chat_id=int(user_id), text=f"Ошибка при подтверждении: {e}")
     finally:
-        await bot.send_message(chat_id=int(user_id), text="ВАШ ПРИКОЛ ПРИНЯТ!!!!!")
+        await bot.send_message(chat_id=int(user_id), text="ВАШ ПРИКОЛ ПРИНЯТ!!!!!🔥")
         media_groups.pop(mes_id, None)
         description_messages.pop(mes_id, None)
         await callback.answer(text="✅ Одобрено")
@@ -213,7 +213,7 @@ async def cancel(callback: CallbackQuery):
             await bot.send_message(chat_id=int(user_id), text=f"Ошибка при отмене: {e}")
     finally:
          await callback.message.delete()
-         await bot.send_message(chat_id=int(user_id), text="ТВОЙ ПРИКОЛ НЕ ПРИНЯТ\nУ ТЯ ХУЕВЫЙ ЮМОР")
+         await bot.send_message(chat_id=int(user_id), text="ТВОЙ ПРИКОЛ НЕ ПРИНЯТ😎\nУ ТЯ ХУЕВЫЙ ЮМОР😎")
 
 
 
