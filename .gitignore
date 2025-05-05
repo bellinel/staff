@@ -6,6 +6,7 @@ __pycache__/
 # Virtual Environment
 venv/
 .env
+bot.db
 
 # IDE
 .vscode/
