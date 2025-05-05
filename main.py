@@ -102,7 +102,7 @@ async def handle_photo(message: Message, state: FSMContext):
 
 @dp.callback_query(F.data == 'yes')
 async def want_description(callback: CallbackQuery, state: FSMContext):
-    await callback.message.answer(text='📩 Отправь описание')
+    await callback.message.edit_text(text='📩 Отправь описание')
     await state.set_state(User.discripthion)
 
 @dp.callback_query(F.data == 'no')
