@@ -19,7 +19,7 @@ from database.orm import add_discription_for_media_group, add_media_group_bulk, 
 from text import MessageTexts
 from state_class import User
 from datetime import timedelta
-
+from asyncio import Event
 
 
 load_dotenv()
@@ -39,6 +39,7 @@ description_messages = {}
 media_group_locks = {}
 time_prewius_message = None
 delay = timedelta(seconds=1800)
+timer_event = Event()
 
 
 # --- Keyboards ---
@@ -203,6 +204,7 @@ async def confirm(callback: CallbackQuery):
         await bot.send_message(chat_id=ADMIN_ID, text=await get_queue_status_text())
         if mes_id not in message_queue:
             message_queue.append (mes_id)
+            
         media_groups.pop(mes_id, None)
         description_messages.pop(mes_id, None)
         await callback.answer(text="✅ Одобрено")
@@ -250,13 +252,14 @@ async def delete_message_safe(bot: Bot, chat_id: int, message_id: int):
 
 
 async def message_sender(bot: Bot):
+    
     while True:
         if message_queue:
           
 
             mes_id = message_queue.popleft()
             print(f"Очередь сообщений: {message_queue}")
-
+            timer_event.set()
 
             # Пытаемся получить одиночное сообщение
             data = await get_message_by_id(mes_id)
@@ -265,9 +268,9 @@ async def message_sender(bot: Bot):
                 text = data.text
                 try:
                     if photo and text:
-                        await bot.send_photo(chat_id=CHANNEL_ID, photo=photo, caption=text)
+                        await bot.send_photo(chat_id=ADMIN_ID, photo=photo, caption=text)
                     elif photo:
-                        await bot.send_photo(chat_id=CHANNEL_ID, photo=photo)
+                        await bot.send_photo(chat_id=ADMIN_ID, photo=photo)
                     await delete_message_by_id(mes_id)
                 except Exception as e:
                     print(f"Ошибка при отправке одиночного сообщения: {e}")
@@ -291,15 +294,25 @@ async def message_sender(bot: Bot):
 
             await asyncio.sleep(delay.total_seconds())  # Задержка после отправки
         else:
+            timer_event.clear()
             await asyncio.sleep(1)  # Проверка очереди каждую секунду
 
 async def get_queue_status_text() -> str:
     queue_length = len(message_queue)
+
     if queue_length == 0:
-        return "Отправляю в канал"
-    else:
-        estimated_time = queue_length * delay.total_seconds() // 60  # в минутах
-        return f"Пост будет в канале через {int(estimated_time)} минут"
+        if timer_event.is_set():
+            # Сейчас идёт отправка одиночного поста
+            estimated_time = delay.total_seconds() // 60
+            return f"Пост будет в канале через {int(estimated_time)} минут"
+        else:
+            return "Отправляю пост"  # Очередь пуста и ничего не отправляется
+
+    # Очередь НЕ пуста
+    total_items = queue_length + (1 if timer_event.is_set() else 0)
+    estimated_time = total_items * delay.total_seconds() // 60
+    return f"Пост будет в канале через {int(estimated_time)} минут"
+
 
 
 # --- Main ---
