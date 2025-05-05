@@ -267,7 +267,7 @@ async def message_sender(bot: Bot):
                     if photo and text:
                         await bot.send_photo(chat_id=CHANNEL_ID, photo=photo, caption=text)
                     elif photo:
-                        await bot.send_photo(chat_id=ChildProcessError, photo=photo)
+                        await bot.send_photo(chat_id=CHANNEL_ID, photo=photo)
                     await delete_message_by_id(mes_id)
                 except Exception as e:
                     print(f"Ошибка при отправке одиночного сообщения: {e}")
