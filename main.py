@@ -3,6 +3,7 @@ from asyncio import tasks
 import datetime
 import os
 from collections import defaultdict, deque
+from re import S
 import time
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import Command
@@ -201,13 +202,13 @@ async def confirm(callback: CallbackQuery):
         await bot.send_message(chat_id=int(user_id), text=f"Ошибка при подтверждении: {e}")
     finally:
         await bot.send_message(chat_id=int(user_id), text="ВАШ ПРИКОЛ ПРИНЯТ!!!!!🔥")
-        await bot.send_message(chat_id=ADMIN_ID, text=await get_queue_status_text())
+        await callback.answer(text=await get_queue_status_text(), show_alert=True)
         if mes_id not in message_queue:
             message_queue.append (mes_id)
             
         media_groups.pop(mes_id, None)
         description_messages.pop(mes_id, None)
-        await callback.answer(text="✅ Одобрено")
+        
         await asyncio.sleep(2)
         await callback.message.delete()
         
