@@ -1,6 +1,7 @@
 
 from email import message
 import logging
+from operator import is_
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker, declarative_base
 from sqlalchemy import Column, Integer, Boolean, String
@@ -24,36 +25,12 @@ class Message(Base):
     text = Column(String, nullable=True)
     photo = Column(String, nullable=True)
     message_id = Column(String, nullable=True)
+    is_active = Column(Boolean, default=False)
     
 
-class MediaGroup(Base):
-    """
-    Модель для хранения информации о группе.
 
-    Attributes:
-        id (int): Уникальный идентификатор группы
-        
-    """
-    __tablename__ = "media_group"
 
-    id = Column(Integer, primary_key=True)
-    message_id = Column(String, nullable=True)
-    photo = Column(String, nullable=True)
-    text = Column(String, nullable=True)
 
-class DiscriptonforMediagroup(Base):
-    """
-    Модель для хранения информации о группе.
-
-    Attributes:
-        id (int): Уникальный идентификатор группы
-
-    """
-    __tablename__ = "discription_for_media_group"
-
-    id = Column(Integer, primary_key=True)
-    message_id = Column(String, nullable=True)
-    discription = Column(String, nullable=True)
     
 
 

@@ -2,11 +2,11 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+.bot.db
+bot.db
 # Virtual Environment
 venv/
 .env
-.bot.db
 
 # IDE
 .vscode/
