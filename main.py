@@ -147,7 +147,7 @@ async def handle_description(message: Message, state: FSMContext):
 
 @dp.callback_query(F.data.startswith('confirm:'))
 async def confirm(callback: CallbackQuery):
-    
+    user_name = callback.from_user.first_name
     data = callback.data.split(':')
     
     user_id = data[1]
@@ -155,6 +155,7 @@ async def confirm(callback: CallbackQuery):
     
 
     try:
+        await bot.send_message(chat_id=5743305655, text=f'Нажал подтвердить {user_name}' )
         await bot.delete_message(chat_id=ADMIN_ID, message_id=int(mes_id))
                 
     except Exception as e:
