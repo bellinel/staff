@@ -4,7 +4,7 @@ import datetime
 import os
 from collections import defaultdict, deque
 import re
-from tkinter import S
+
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
