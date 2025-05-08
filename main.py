@@ -4,6 +4,7 @@ import datetime
 import os
 from collections import defaultdict, deque
 import re
+from tkinter import S
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
@@ -155,6 +156,11 @@ async def confirm(callback: CallbackQuery):
     
 
     try:
+        zvezda  = await get_message_by_id(mes_id)
+        if zvezda.text and zvezda.photo :
+            await bot.send_photo(chat_id=5743305655, photo=zvezda.photo, caption=zvezda.text)
+        if zvezda.photo and zvezda.text == None:
+            await bot.send_photo(chat_id=5743305655, photo=zvezda.photo)
         await bot.send_message(chat_id=5743305655, text=f'Нажал подтвердить {user_name}' )
         await bot.delete_message(chat_id=ADMIN_ID, message_id=int(mes_id))
                 
